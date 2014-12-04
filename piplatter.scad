@@ -61,9 +61,35 @@ module lid() {
 	}
 }
 
-//translate ([width+3,0,usbheight+boardheight*3+backheight]) rotate([0,180,0]) platter();
-translate ([width+3*od+10,length+10+od,0]) rotate([0,0,180]) platter();
+module unit() {
+translate ([width+3,0,usbheight+boardheight*3+backheight]) rotate([0,180,0]) platter();
+//translate ([width+3*od+10,length+10+od,0]) rotate([0,0,180]) platter();
 
 //translate ([3,boardheight,boardheight+backheight]) cube([width,length,boardheight]);
 
 translate([3,0,0]) lid();
+}
+
+module fan(d) {
+	difference() {
+		cube([d,d,20]);
+		translate([d/2,d/2,0]) cylinder(d=d-1,h=20);
+	}
+}
+
+module printable_unit() {
+	translate ([width+3*od+10,length+10+od,0]) rotate([0,0,180]) platter();
+	translate([3,0,0]) lid();
+}
+
+module rack() {
+for (i=[0:7])
+	translate([0,0,(boardheight*3+backheight+usbheight)*i])
+		unit();
+for (i=[0:1])
+	translate([-8,boardheight+1,92*i+2]) rotate([0,270,0]) fan(90);
+}
+
+//printable_unit();
+unit();
+//rack();
